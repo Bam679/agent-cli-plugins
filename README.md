@@ -6,6 +6,11 @@ A Claude Code marketplace for five small CLIs that let AI agents work with Apple
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/Bam679/agent-cli-plugins/badge)](https://scorecard.dev/viewer/?uri=github.com/Bam679/agent-cli-plugins)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+  <img alt="agent-cli logo: a prompt chevron between square brackets" src="assets/logo.svg" height="56">
+</picture>
+
 ## About
 
 This repository is the entry point to the agent-cli family. It holds the marketplace that lists all five plugins, a shared skill that teaches agents the common rules once, and the shared Go code and repository template that keep the five CLIs consistent.

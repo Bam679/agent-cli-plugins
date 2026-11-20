@@ -60,6 +60,21 @@ def icon_png(hex_color, size=512):
     return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(b"".join(rows), 9)) + chunk(b"IEND", b"")
 
 
+def binaries(v):
+    """Yield (relative path, bytes): plugin icon and logos from brand/<bin>/,
+    or a generated icon when the brand folder has no assets."""
+    brand = os.path.join(ROOT, "brand", v["BIN"])
+    icon = os.path.join(brand, "icon-512.png")
+    if os.path.exists(icon):
+        with open(icon, "rb") as f:
+            yield os.path.join("plugin", ".claude-plugin", "icon.png"), f.read()
+        for name in ("logo.svg", "logo-dark.svg", "icon.svg"):
+            with open(os.path.join(brand, name), "rb") as f:
+                yield os.path.join("assets", name), f.read()
+    else:
+        yield os.path.join("plugin", ".claude-plugin", "icon.png"), icon_png(v.get("ICON_COLOR", "#3B5BDB"))
+
+
 def subst(text, v):
     for k, val in v.items():
         if isinstance(val, str):
@@ -106,20 +121,19 @@ def main(argv):
     repo = os.path.abspath(args[0])
     v = load(repo)
     drift = []
-    icon_rel = os.path.join("plugin", ".claude-plugin", "icon.png")
-    icon = icon_png(v.get("ICON_COLOR", "#3B5BDB"))
-    icon_dst = os.path.join(repo, icon_rel)
-    if check:
-        try:
-            with open(icon_dst, "rb") as f:
-                if f.read() != icon:
-                    drift.append(icon_rel)
-        except FileNotFoundError:
-            drift.append(icon_rel)
-    else:
-        os.makedirs(os.path.dirname(icon_dst), exist_ok=True)
-        with open(icon_dst, "wb") as f:
-            f.write(icon)
+    for rel, data in binaries(v):
+        dst = os.path.join(repo, rel)
+        if check:
+            try:
+                with open(dst, "rb") as f:
+                    if f.read() != data:
+                        drift.append(rel)
+            except FileNotFoundError:
+                drift.append(rel)
+            continue
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with open(dst, "wb") as f:
+            f.write(data)
     for rel, content, mode in outputs(v):
         dst = os.path.join(repo, rel)
         if rel in SEED_ONLY and os.path.exists(dst):
