@@ -3,6 +3,7 @@
 # Claude Code config directory (never touches the user's real config).
 set -eu
 src=${1:-Bam679/agent-cli-plugins}
+case "$src" in .) src=./ ;; esac
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 export CLAUDE_CONFIG_DIR="$tmp"

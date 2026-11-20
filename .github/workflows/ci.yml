@@ -63,4 +63,4 @@ jobs:
       # postinstall fetches the native binary for this pinned version
       - run: npm install --global @anthropic-ai/claude-code@2.1.329
       - run: make plugin
-      - run: scripts/install-smoke.sh .
+      - run: scripts/install-smoke.sh ./
