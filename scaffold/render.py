@@ -5,8 +5,8 @@ Usage: render.py <repo-dir>          write generated files
        render.py --check <repo-dir>  exit 1 if generated files drifted
 
 Inputs live in <repo-dir>/.scaffold/: vars.json plus Markdown snippets
-(COMMANDS, EXAMPLES, TCC, ABOUT, FEATURES, TUTORIAL, REFERENCE and the
-optional ACKNOWLEDGMENTS) for the README and docs. Only files listed in the
+(COMMANDS, TCC, MECHANISM, MEASURED, QUICKSTART, HOW_IT_WORKS, WHEN_NOT,
+TUTORIAL, REFERENCE and the optional ACKNOWLEDGMENTS) for the README and docs. Only files listed in the
 scaffold are written; repo-specific code (cmd/, internal/<pkg>/, skills/) is
 never touched.
 """
@@ -17,13 +17,16 @@ import sys
 import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# Written once when a repo is created; release-please maintains them later.
+SEED_ONLY = {".release-please-manifest.json", os.path.join("plugin", ".claude-plugin", "plugin.json")}
 ROOT = os.path.dirname(HERE)
 
 
 def load(repo):
     with open(os.path.join(repo, ".scaffold", "vars.json"), encoding="utf-8") as f:
         v = json.load(f)
-    for name in ("COMMANDS", "EXAMPLES", "TCC", "ABOUT", "FEATURES", "TUTORIAL", "REFERENCE", "ACKNOWLEDGMENTS"):
+    for name in ("COMMANDS", "TCC", "MECHANISM", "MEASURED", "QUICKSTART", "HOW_IT_WORKS", "WHEN_NOT",
+                 "TUTORIAL", "REFERENCE", "ACKNOWLEDGMENTS"):
         try:
             with open(os.path.join(repo, ".scaffold", name + ".md"), encoding="utf-8") as f:
                 v[name] = f.read().strip()
@@ -33,6 +36,8 @@ def load(repo):
         v["ACKNOWLEDGMENTS"] = "\n## Acknowledgements\n\n" + v["ACKNOWLEDGMENTS"] + "\n"
     v["POLICY"] = "\n".join("   " + line for line in v["POLICY"].splitlines())
     v["MODULE"] = "github.com/Bam679/" + v["REPO"]
+    v.setdefault("DEFAULT_ACCESS", "`" + v["BIN"] + "` only reads until you allow writes in")
+    v.setdefault("DEFAULT_NOTE", "")
     return v
 
 
@@ -117,6 +122,8 @@ def main(argv):
             f.write(icon)
     for rel, content, mode in outputs(v):
         dst = os.path.join(repo, rel)
+        if rel in SEED_ONLY and os.path.exists(dst):
+            continue  # owned by release-please after the first render
         if check:
             try:
                 with open(dst, encoding="utf-8") as f:

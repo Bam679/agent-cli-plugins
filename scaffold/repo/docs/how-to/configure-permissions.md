@@ -8,7 +8,7 @@ This guide shows you how to decide what an AI agent may do with `__BIN__`. It as
 __BIN__ policy
 ```
 
-Without a policy file the output says `built-in default (read-only)`. In that state every write exits with code 4.
+Without a policy file the output says `built-in default (read-only)`. In that state every write exits with code 4.__DEFAULT_NOTE__
 
 ## Allow writes in one container
 

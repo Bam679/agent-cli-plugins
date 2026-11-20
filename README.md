@@ -12,7 +12,7 @@ This repository is the entry point to the agent-cli family. It holds the marketp
 
 | CLI | What an agent can do with it | Repository |
 |---|---|---|
-| `apple-mail` | List, search and read mail; mark, flag, move and trash. It cannot send. | [apple-mail-cli](https://github.com/Bam679/apple-mail-cli) |
+| `apple-mail` | List, search and read mail; save drafts; mark, flag, move and trash. It cannot send. | [apple-mail-cli](https://github.com/Bam679/apple-mail-cli) |
 | `apple-notes` | Search and read notes; create, append and move them | [apple-notes-cli](https://github.com/Bam679/apple-notes-cli) |
 | `apple-calendar` | Read and search events; create, update and delete them | [apple-calendar-cli](https://github.com/Bam679/apple-calendar-cli) |
 | `apple-reminders` | Read lists and due tasks; add, complete and update reminders | [apple-reminders-cli](https://github.com/Bam679/apple-reminders-cli) |

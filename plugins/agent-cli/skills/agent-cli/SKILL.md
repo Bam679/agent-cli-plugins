@@ -10,7 +10,7 @@ Five small CLIs with one shared contract:
 
 | tool | data | reference |
 |---|---|---|
-| `apple-mail` | Apple Mail (read, triage; **never sends**) | [references/apple-mail.md](references/apple-mail.md) |
+| `apple-mail` | Apple Mail (read, triage, drafts; never sends) | [references/apple-mail.md](references/apple-mail.md) |
 | `apple-notes` | Apple Notes | [references/apple-notes.md](references/apple-notes.md) |
 | `apple-calendar` | Apple Calendar (EventKit) | [references/apple-calendar.md](references/apple-calendar.md) |
 | `apple-reminders` | Apple Reminders (EventKit) | [references/apple-reminders.md](references/apple-reminders.md) |

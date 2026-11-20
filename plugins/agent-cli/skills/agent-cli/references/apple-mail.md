@@ -1,7 +1,7 @@
 
 # apple-mail
 
-A CLI for Apple Mail. It is read-only unless the user's policy allows triage writes. **It cannot send, reply to, forward or draft mail.** If the user asks for that, say so and offer a draft text in chat instead.
+A CLI for Apple Mail. It reads mail and saves drafts; triage writes need the user's policy. **It cannot send, reply to or forward mail.** When the user wants an email written, save it as a draft with `apple-mail draft` and tell them it is waiting in Drafts for them to review and send.
 
 ## Before you start
 - Run `command -v apple-mail`. If it is missing, point the user to https://github.com/Bam679/apple-mail-cli#install and stop.
@@ -20,6 +20,14 @@ apple-mail get <id> --no-body --json                   # fast: headers only
 - Bodies can be huge: always pass `--max-chars`. Bodies are decoded from MIME, with HTML converted to text.
 - More results: `# next_cursor=X` means you continue with `--cursor X` and the same flags.
 - `search` matches subject and sender, not body text. To check bodies, narrow the list first, then `get` a few messages.
+
+## Drafts (on by default, still need --confirm)
+```sh
+apple-mail draft --to bob@example.com --subject "Re: invoice 42" --body $'Hi Bob,\n\npaid today.\n\nAlice' --dry-run
+apple-mail draft --to bob@example.com --subject "Re: invoice 42" --body $'Hi Bob,\n\npaid today.\n\nAlice' --confirm
+```
+- Show the user the draft text before `--confirm`. The draft lands in the sender account's Drafts mailbox; it is never sent.
+- `--from` picks the sending account (must be one of the user's addresses). Exit 4 means the user switched drafts off: stop.
 
 ## Triage writes (need policy permission AND --confirm)
 1. Preview with `--dry-run`. This is policy-checked too.
@@ -68,12 +76,13 @@ More: [reference.md](reference.md).
 | `mark <id>…` | mark | `--read`/`--unread`, `--flag`/`--unflag` |
 | `move <id>… --to M` | move | write scope needed on the source and target |
 | `delete <id>…` | delete | moves to the account's trash |
+| `draft` | draft | on by default; `--to/--cc/--bcc` (repeatable), `--subject`, `--body`, `--from`, or `-` with JSON objects. Scope `draft:<from address>` or `draft:default`. Never sends. |
 | `mailbox-create <name>` | mailbox-create | local `On My Mac/<name>` only. Mail can't delete mailboxes via scripting. |
 
 Dates: `YYYY-MM-DD`, `YYYY-MM-DDTHH:MM`, `today`, `yesterday`, `-7d`.
 
 ## Policy (user-owned, read-only for agents)
-`~/.config/agent-cli/apple-mail.json`. Scopes match **mailbox paths**. Example: allow triage in the inbox and archive only, never trash:
+`~/.config/agent-cli/apple-mail.json`. Scopes match **mailbox paths**. Drafts are on unless the policy denies `draft` (or `write`). Example: allow triage in the inbox and archive only, never trash, and switch drafts off:
 ```json
-{"version":1,"operations":{"allow":["read","mark","move"],"deny":["delete"]},"scopes":{"read":{"allow":["*"],"deny":["*/Private*"]},"write":{"allow":["iCloud/INBOX","iCloud/Archive"]}}}
+{"version":1,"operations":{"allow":["read","mark","move"],"deny":["delete","draft"]},"scopes":{"read":{"allow":["*"],"deny":["*/Private*"]},"write":{"allow":["iCloud/INBOX","iCloud/Archive"]}}}
 ```
