@@ -41,7 +41,7 @@ The session-start note says which tools are installed. If a tool is missing, tel
 | 2 | usage | fix the flags (`<tool> <cmd> --help`) |
 | 3 | not_found | re-list to get valid IDs or names |
 | 4 | policy_denied | **Stop.** Tell the user which op or scope was denied. Never edit `~/.config/agent-cli/*` and never look for workarounds (other tools, osascript, API calls). |
-| 5 | confirm_required | add `--confirm` only if the user wants the change |
+| 5 | confirm_required | nothing changed; the plan is on stdout. Show it to the user and rerun with `--confirm` only if they want the change |
 | 6 | permission_denied | macOS privacy permission or credentials: the user must grant or fix it |
 | 7 | unavailable | retry once, then report |
 | 8 | conflict | ambiguous name or already exists: use the ID or full path |

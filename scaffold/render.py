@@ -4,8 +4,9 @@
 Usage: render.py <repo-dir>          write generated files
        render.py --check <repo-dir>  exit 1 if generated files drifted
 
-Inputs live in <repo-dir>/.scaffold/: vars.json plus COMMANDS.md,
-EXAMPLES.md and TCC.md snippets for the README. Only files listed in the
+Inputs live in <repo-dir>/.scaffold/: vars.json plus Markdown snippets
+(COMMANDS, EXAMPLES, TCC, ABOUT, FEATURES, TUTORIAL, REFERENCE and the
+optional ACKNOWLEDGMENTS) for the README and docs. Only files listed in the
 scaffold are written; repo-specific code (cmd/, internal/<pkg>/, skills/) is
 never touched.
 """
@@ -22,9 +23,14 @@ ROOT = os.path.dirname(HERE)
 def load(repo):
     with open(os.path.join(repo, ".scaffold", "vars.json"), encoding="utf-8") as f:
         v = json.load(f)
-    for name in ("COMMANDS", "EXAMPLES", "TCC"):
-        with open(os.path.join(repo, ".scaffold", name + ".md"), encoding="utf-8") as f:
-            v[name] = f.read().strip()
+    for name in ("COMMANDS", "EXAMPLES", "TCC", "ABOUT", "FEATURES", "TUTORIAL", "REFERENCE", "ACKNOWLEDGMENTS"):
+        try:
+            with open(os.path.join(repo, ".scaffold", name + ".md"), encoding="utf-8") as f:
+                v[name] = f.read().strip()
+        except FileNotFoundError:
+            v[name] = ""
+    if v["ACKNOWLEDGMENTS"]:
+        v["ACKNOWLEDGMENTS"] = "\n## Acknowledgements\n\n" + v["ACKNOWLEDGMENTS"] + "\n"
     v["POLICY"] = "\n".join("   " + line for line in v["POLICY"].splitlines())
     v["MODULE"] = "github.com/Bam679/" + v["REPO"]
     return v

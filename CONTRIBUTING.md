@@ -1,8 +1,9 @@
-# Contributing
+# Contributing to agent-cli-plugins
 
-This repo holds the shared core and the marketplace. See [AGENTS.md](AGENTS.md) for the layout.
+[AGENTS.md](AGENTS.md) describes the layout of this repository.
 
-- **Shared Go code** (`scaffold/go`): standard library only, with tests, fuzz targets and golden files. `make test` must stay green. Afterwards, render the change into every CLI repo (`python3 scaffold/render.py ../<repo>`) and open PRs there.
-- **Skills:** the tool skills live in each CLI repo (`plugin/skills/<tool>`). `make references` copies them here.
-- **Commits:** use [Conventional Commits](https://www.conventionalcommits.org/). Install hooks with `lefthook install`.
-- No personal data in examples, fixtures or issues.
+Shared Go code lives in `scaffold/go`. It uses only the standard library and comes with tests, fuzz targets and golden files; `make test` must pass. After a change, render it into every CLI repository with `python3 scaffold/render.py ../<repo>` and open a pull request there as well.
+
+The tool skills live in each CLI repository under `plugin/skills/<tool>`. `make references` copies their reference sections into the shared skill here.
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/), and `lefthook install` sets up the git hooks that check them. Examples, fixtures and issues must not contain real personal data.
