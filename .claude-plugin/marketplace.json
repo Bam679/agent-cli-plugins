@@ -1,6 +1,9 @@
 {
   "name": "agent-cli-plugins",
-  "owner": { "name": "Bam679", "url": "https://github.com/Bam679" },
+  "owner": {
+    "name": "Bam679",
+    "url": "https://github.com/Bam679"
+  },
   "description": "Agent-optimized CLIs for Apple Mail, Notes, Calendar, Reminders and Paperless-ngx, each with a Claude Code skill and policy guard, plus a shared agent-cli skill.",
   "plugins": [
     {
@@ -11,31 +14,56 @@
     },
     {
       "name": "apple-mail",
-      "source": { "source": "git-subdir", "url": "https://github.com/Bam679/apple-mail-cli.git", "path": "plugin", "ref": "v0.1.0" },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/Bam679/apple-mail-cli.git",
+        "path": "plugin",
+        "ref": "v0.2.0"
+      },
       "description": "Apple Mail: read and triage mail; never sends.",
       "category": "productivity"
     },
     {
       "name": "apple-notes",
-      "source": { "source": "git-subdir", "url": "https://github.com/Bam679/apple-notes-cli.git", "path": "plugin", "ref": "v0.1.0" },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/Bam679/apple-notes-cli.git",
+        "path": "plugin",
+        "ref": "v0.2.0"
+      },
       "description": "Apple Notes: list, search, read; policy-gated create/append/move.",
       "category": "productivity"
     },
     {
       "name": "apple-calendar",
-      "source": { "source": "git-subdir", "url": "https://github.com/Bam679/apple-calendar-cli.git", "path": "plugin", "ref": "v0.1.0" },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/Bam679/apple-calendar-cli.git",
+        "path": "plugin",
+        "ref": "v0.1.0"
+      },
       "description": "Apple Calendar: events and search; policy-gated create/update/delete.",
       "category": "productivity"
     },
     {
       "name": "apple-reminders",
-      "source": { "source": "git-subdir", "url": "https://github.com/Bam679/apple-reminders-cli.git", "path": "plugin", "ref": "v0.1.0" },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/Bam679/apple-reminders-cli.git",
+        "path": "plugin",
+        "ref": "v0.1.0"
+      },
       "description": "Apple Reminders: lists and due tasks; policy-gated add/complete.",
       "category": "productivity"
     },
     {
       "name": "paperless",
-      "source": { "source": "git-subdir", "url": "https://github.com/Bam679/paperless-cli.git", "path": "plugin", "ref": "v0.1.0" },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/Bam679/paperless-cli.git",
+        "path": "plugin",
+        "ref": "v0.1.0"
+      },
       "description": "Paperless-ngx: search, read and download documents; policy-gated upload/tagging.",
       "category": "productivity"
     }
