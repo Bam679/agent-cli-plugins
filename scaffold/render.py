@@ -11,7 +11,9 @@ never touched.
 """
 import json
 import os
+import struct
 import sys
+import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -26,6 +28,25 @@ def load(repo):
     v["POLICY"] = "\n".join("   " + line for line in v["POLICY"].splitlines())
     v["MODULE"] = "github.com/Bam679/" + v["REPO"]
     return v
+
+
+def icon_png(hex_color, size=512):
+    """A deterministic plugin icon: a white ring on a coloured square."""
+    r, g, b = (int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
+    c, outer, inner = size / 2, size * 0.32, size * 0.20
+    rows = []
+    for y in range(size):
+        row = bytearray(b"\x00")
+        for x in range(size):
+            d = ((x - c) ** 2 + (y - c) ** 2) ** 0.5
+            row += bytes((255, 255, 255)) if inner <= d <= outer else bytes((r, g, b))
+        rows.append(bytes(row))
+
+    def chunk(kind, data):
+        return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF)
+
+    ihdr = struct.pack(">IIBBBBB", size, size, 8, 2, 0, 0, 0)
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(b"".join(rows), 9)) + chunk(b"IEND", b"")
 
 
 def subst(text, v):
@@ -74,6 +95,20 @@ def main(argv):
     repo = os.path.abspath(args[0])
     v = load(repo)
     drift = []
+    icon_rel = os.path.join("plugin", ".claude-plugin", "icon.png")
+    icon = icon_png(v.get("ICON_COLOR", "#3B5BDB"))
+    icon_dst = os.path.join(repo, icon_rel)
+    if check:
+        try:
+            with open(icon_dst, "rb") as f:
+                if f.read() != icon:
+                    drift.append(icon_rel)
+        except FileNotFoundError:
+            drift.append(icon_rel)
+    else:
+        os.makedirs(os.path.dirname(icon_dst), exist_ok=True)
+        with open(icon_dst, "wb") as f:
+            f.write(icon)
     for rel, content, mode in outputs(v):
         dst = os.path.join(repo, rel)
         if check:
@@ -96,5 +131,13 @@ def main(argv):
     return 0
 
 
+def write_icon(path, color):
+    with open(path, "wb") as f:
+        f.write(icon_png(color))
+
+
 if __name__ == "__main__":
+    if len(sys.argv) == 4 and sys.argv[1] == "--icon":
+        write_icon(sys.argv[2], sys.argv[3])
+        sys.exit(0)
     sys.exit(main(sys.argv[1:]))
