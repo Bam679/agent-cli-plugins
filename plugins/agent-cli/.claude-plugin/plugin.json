@@ -1,0 +1,10 @@
+{
+  "name": "agent-cli",
+  "version": "0.1.0",
+  "description": "Shared skill for the agent-cli family (Apple Mail, Notes, Calendar, Reminders, Paperless-ngx): output contract, exit codes, policy and write gate, with per-tool references loaded on demand. Detects installed CLIs at session start.",
+  "author": { "name": "Bam679", "url": "https://github.com/Bam679" },
+  "homepage": "https://github.com/Bam679/agent-cli-plugins",
+  "repository": "https://github.com/Bam679/agent-cli-plugins",
+  "license": "MIT",
+  "keywords": ["agent-cli", "apple-mail", "apple-notes", "apple-calendar", "apple-reminders", "paperless", "macos", "cli"]
+}

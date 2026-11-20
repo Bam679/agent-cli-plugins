@@ -1,0 +1,10 @@
+{
+  "name": "__BIN__",
+  "version": "0.0.0",
+  "description": "__DESC__",
+  "author": { "name": "Bam679", "url": "https://github.com/Bam679" },
+  "homepage": "https://github.com/Bam679/__REPO__",
+  "repository": "https://github.com/Bam679/__REPO__",
+  "license": "MIT",
+  "keywords": [__KEYWORDS__]
+}

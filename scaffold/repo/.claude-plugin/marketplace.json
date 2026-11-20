@@ -1,0 +1,13 @@
+{
+  "name": "__REPO__",
+  "owner": { "name": "Bam679" },
+  "description": "Single-plugin marketplace for __BIN__. All agent CLIs: Bam679/agent-cli-plugins.",
+  "plugins": [
+    {
+      "name": "__BIN__",
+      "source": "./plugin",
+      "description": "__DESC__",
+      "category": "productivity"
+    }
+  ]
+}
