@@ -15,7 +15,7 @@ lint:
 	cd scaffold/go && golangci-lint run ./...
 
 fuzz-smoke:
-	cd scaffold/go && ../repo/scripts/fuzz-smoke.sh 5s
+	cd scaffold/go && ../repo/scripts/fuzz-smoke.sh 3000x
 
 vuln:
 	cd scaffold/go && $(GOVULNCHECK) ./...
